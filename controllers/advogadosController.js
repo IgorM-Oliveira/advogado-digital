@@ -1,5 +1,3 @@
-// controllers/advogadosController.js
-
 const Advogado = require("../models/advogadoModel");
 
 // Listar todos os advogados

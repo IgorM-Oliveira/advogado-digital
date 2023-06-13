@@ -1,5 +1,3 @@
-// models/advogadoModel.js
-
 const { client } = require("../config/db");
 
 class Advogado {
