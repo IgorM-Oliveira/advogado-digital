@@ -9,6 +9,7 @@ const { connect } = require("./config/db");
   const advogadosRouter = require("./routes/advogados");
   const clientesRouter = require("./routes/cliente");
   const processosRouter = require("./routes/processos");
+  const partesRouter = require("./routes/partes");
 
 // Conecte-se ao banco de dados
 connect()
@@ -21,6 +22,9 @@ connect()
 
       // Defina a rota para processos
       app.use("/processos", processosRouter);
+
+      // Defina a rota para partes
+      app.use("/partes", partesRouter);
 
       // Inicie o servidor
       app.listen(port, () => {
