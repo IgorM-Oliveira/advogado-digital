@@ -1,10 +1,21 @@
 const { client } = require("../config/db");
 
 class Advogado {
-    constructor(id, nome, email) {
+    constructor(id, id_estado, id_cidade, nome, contato, logradouro, endereco, numberEnde, numAdv, senha, estadLogin, dataCadastro, areas, processo_id) {
         this.id = id;
+        this.id_estado = id_estado;
+        this.id_cidade = id_cidade;
         this.nome = nome;
-        this.email = email;
+        this.contato = contato;
+        this.logradouro = logradouro;
+        this.endereco = endereco;
+        this.numberEnde = numberEnde;
+        this.numAdv = numAdv;
+        this.senha = senha;
+        this.estadLogin = estadLogin;
+        this.dataCadastro = dataCadastro;
+        this.areas = areas;
+        this.processo_id = processo_id;
     }
 
     static async listarTodos() {
@@ -32,12 +43,12 @@ class Advogado {
     }
 
     static async criar(novoAdvogado) {
-        const { nome, email } = novoAdvogado;
+        const { id_estado, id_cidade, nome, contato, logradouro, endereco, numberEnde, numAdv, senha, estadLogin, dataCadastro, areas, processo_id } = novoAdvogado;
         try {
-            const result = await client.query("INSERT INTO advogados (nome, email) VALUES ($1, $2) RETURNING *", [
-                nome,
-                email,
-            ]);
+            const result = await client.query(
+                "INSERT INTO advogados (id_estado, id_cidade, nome, contato, logradouro, endereco, numberEnde, numAdv, senha, estadLogin, dataCadastro, areas, processo_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING *",
+                [id_estado, id_cidade, nome, contato, logradouro, endereco, numberEnde, numAdv, senha, estadLogin, dataCadastro, areas, processo_id]
+            );
             return result.rows[0];
         } catch (error) {
             console.error("Falha ao criar o advogado:", error);
@@ -46,11 +57,11 @@ class Advogado {
     }
 
     static async atualizar(id, dadosAtualizados) {
-        const { nome, email } = dadosAtualizados;
+        const { id_estado, id_cidade, nome, contato, logradouro, endereco, numberEnde, numAdv, senha, estadLogin, dataCadastro, areas, processo_id } = dadosAtualizados;
         try {
             const result = await client.query(
-                "UPDATE advogados SET nome = $1, email = $2 WHERE id = $3 RETURNING *",
-                [nome, email, id]
+                "UPDATE advogados SET id_estado = $1, id_cidade = $2, nome = $3, contato = $4, logradouro = $5, endereco = $6, numberEnde = $7, numAdv = $8, senha = $9, estadLogin = $10, dataCadastro = $11, areas = $12, processo_id = $13 WHERE id = $14 RETURNING *",
+                [id_estado, id_cidade, nome, contato, logradouro, endereco, numberEnde, numAdv, senha, estadLogin, dataCadastro, areas, processo_id, id]
             );
             if (result.rows.length > 0) {
                 return result.rows[0];
