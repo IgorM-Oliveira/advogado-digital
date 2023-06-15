@@ -7,12 +7,28 @@ const { connect } = require("./config/db");
 
 // Importe o módulo de rotas para advogados
   const advogadosRouter = require("./routes/advogados");
+  const clientesRouter = require("./routes/cliente");
+  const processosRouter = require("./routes/processos");
+  const partesRouter = require("./routes/partes");
+  const movimentacoesRouter = require("./routes/movimentacoes");
 
 // Conecte-se ao banco de dados
 connect()
     .then(() => {
       // Defina a rota para advogados
       app.use("/advogados", advogadosRouter);
+
+      // Defina a rota para clientes
+      app.use("/clientes", clientesRouter);
+
+      // Defina a rota para processos
+      app.use("/processos", processosRouter);
+
+      // Defina a rota para partes
+      app.use("/partes", partesRouter);
+
+      // Defina a rota para movimentacoes
+      app.use("/movimentacoes", movimentacoesRouter);
 
       // Inicie o servidor
       app.listen(port, () => {
