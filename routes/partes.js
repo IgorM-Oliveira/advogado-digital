@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const partesController = require("../controllers/partesController");
+const authMiddleware = require('../middlewares/authMiddleware');
+
+router.use(authMiddleware);
 
 // Listar todos os partes
 router.get("/", partesController.listarPartes);

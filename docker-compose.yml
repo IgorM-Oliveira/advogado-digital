@@ -8,7 +8,6 @@ services:
       - "8080:8080"
     volumes:
       - ./:/usr/src/app/
-      - /usr/src/app/node_modules
 
   postgres:
     image: postgres:14.1-alpine

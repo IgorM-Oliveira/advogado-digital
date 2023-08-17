@@ -1,20 +1,23 @@
 const express = require("express");
 const router = express.Router();
-const movimentacoessController = require("../controllers/movimentacoesController");
+const movimentacoesController = require("../controllers/movimentacoesController");
+const authMiddleware = require('../middlewares/authMiddleware');
+
+router.use(authMiddleware);
 
 // Listar todos os movimentacoess
-router.get("/", movimentacoessController.listarMovimentacoes);
+router.get("/", movimentacoesController.listarMovimentacoes);
 
 // Obter um movimentacoes pelo ID
-router.get("/:id", movimentacoessController.obterMovimentacao);
+router.get("/:id", movimentacoesController.obterMovimentacao);
 
 // Criar um novo movimentacoes
-router.post("/", movimentacoessController.criarMovimentacao);
+router.post("/", movimentacoesController.criarMovimentacao);
 
 // Atualizar um movimentacoes
-router.put("/:id", movimentacoessController.atualizarMovimentacao);
+router.put("/:id", movimentacoesController.atualizarMovimentacao);
 
 // Excluir um movimentacoes
-router.delete("/:id", movimentacoessController.excluirMovimentacao);
+router.delete("/:id", movimentacoesController.excluirMovimentacao);
 
 module.exports = router;

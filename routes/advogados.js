@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const advogadosController = require("../controllers/advogadosController");
+const authMiddleware = require('../middlewares/authMiddleware');
+
+router.use(authMiddleware);
 
 // Listar todos os advogados
 router.get("/", advogadosController.listarAdvogados);
