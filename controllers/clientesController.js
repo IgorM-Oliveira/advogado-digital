@@ -25,8 +25,7 @@ exports.obterCliente = async (req, res) => {
 
 // Criar um novo cliente
 exports.criarCliente = async (req, res) => {
-    const { nome, email } = req.body;
-    const novoCliente = { nome, email };
+    const novoCliente = req.body;
     try {
         const clienteCriado = await Cliente.criar(novoCliente);
         res.status(201).json(clienteCriado);

@@ -1,4 +1,7 @@
+require("dotenv-safe").config();
+
 const express = require("express");
+const bodyParser = require('body-parser');
 const app = express();
 const port = 8080;
 
@@ -6,35 +9,43 @@ const port = 8080;
 const { connect } = require("./config/db");
 
 // Importe o módulo de rotas para advogados
-  const advogadosRouter = require("./routes/advogados");
-  const clientesRouter = require("./routes/cliente");
-  const processosRouter = require("./routes/processos");
-  const partesRouter = require("./routes/partes");
-  const movimentacoesRouter = require("./routes/movimentacoes");
+const authRouter = require("./routes/auth");
+const advogadosRouter = require("./routes/advogados");
+const clientesRouter = require("./routes/cliente");
+const processosRouter = require("./routes/processos");
+const partesRouter = require("./routes/partes");
+const movimentacoesRouter = require("./routes/movimentacoes");
 
 // Conecte-se ao banco de dados
 connect()
     .then(() => {
-      // Defina a rota para advogados
-      app.use("/advogados", advogadosRouter);
+        // Configure o body-parser para tratar dados JSON e urlencoded
+        app.use(bodyParser.json());
+        app.use(bodyParser.urlencoded({ extended: true }));
 
-      // Defina a rota para clientes
-      app.use("/clientes", clientesRouter);
+        // Defina a rota para login
+        app.use("/login", authRouter);
 
-      // Defina a rota para processos
-      app.use("/processos", processosRouter);
+        // Defina a rota para advogados
+        app.use("/advogados", advogadosRouter);
 
-      // Defina a rota para partes
-      app.use("/partes", partesRouter);
+        // Defina a rota para clientes
+        app.use("/clientes", clientesRouter);
 
-      // Defina a rota para movimentacoes
-      app.use("/movimentacoes", movimentacoesRouter);
+        // Defina a rota para processos
+        app.use("/processos", processosRouter);
 
-      // Inicie o servidor
-      app.listen(port, () => {
-        console.log(`Server is running at http://localhost:${port}`);
-      });
+        // Defina a rota para partes
+        app.use("/partes", partesRouter);
+
+        // Defina a rota para movimentacoes
+        app.use("/movimentacoes", movimentacoesRouter);
+
+        // Inicie o servidor
+        app.listen(port, () => {
+            console.log(`Server is running at http://localhost:${port}`);
+        });
     })
     .catch((error) => {
-      console.error("Failed to connect to the database:", error);
+        console.error("Failed to connect to the database:", error);
     });

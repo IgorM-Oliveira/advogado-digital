@@ -87,6 +87,24 @@ class Advogado {
             throw new Error("Falha ao excluir o advogado");
         }
     }
+
+    static async buscarPorNumeroEsenha(numAdv, senha) {
+        console.log(numAdv, senha)
+        try {
+            const result = await client.query('SELECT * FROM advogados WHERE numAdv like $1 AND senha like $2', [numAdv, senha]);
+
+            console.log(result)
+
+            if (result.rows.length > 0) {
+                return result.rows[0];
+            } else {
+                return null;
+            }
+        } catch (error) {
+            console.error('Erro ao buscar advogado:', error);
+            throw new Error('Erro ao buscar advogado');
+        }
+    }
 }
 
 module.exports = Advogado;

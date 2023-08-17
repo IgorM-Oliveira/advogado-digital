@@ -25,8 +25,7 @@ exports.obterAdvogado = async (req, res) => {
 
 // Criar um novo advogado
 exports.criarAdvogado = async (req, res) => {
-    const { nome, email } = req.body;
-    const novoAdvogado = { nome, email };
+    const novoAdvogado = req.body;
     try {
         const advogadoCriado = await Advogado.criar(novoAdvogado);
         res.status(201).json(advogadoCriado);
@@ -39,8 +38,7 @@ exports.criarAdvogado = async (req, res) => {
 // Atualizar um advogado
 exports.atualizarAdvogado = async (req, res) => {
     const { id } = req.params;
-    const { nome, email } = req.body;
-    const dadosAtualizados = { nome, email };
+    const dadosAtualizados = req.body;
     try {
         const advogadoAtualizado = await Advogado.atualizar(id, dadosAtualizados);
         res.json(advogadoAtualizado);

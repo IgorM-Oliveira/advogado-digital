@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const processosController = require("../controllers/processosController");
+const authMiddleware = require('../middlewares/authMiddleware');
+
+router.use(authMiddleware);
 
 // Listar todos os processos
 router.get("/", processosController.listarProcessos);
