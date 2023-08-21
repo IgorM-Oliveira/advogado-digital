@@ -89,11 +89,8 @@ class Advogado {
     }
 
     static async buscarPorNumeroEsenha(numAdv, senha) {
-        console.log(numAdv, senha)
         try {
             const result = await client.query('SELECT * FROM advogados WHERE numAdv like $1 AND senha like $2', [numAdv, senha]);
-
-            console.log(result)
 
             if (result.rows.length > 0) {
                 return result.rows[0];

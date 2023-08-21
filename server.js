@@ -2,6 +2,7 @@ require("dotenv-safe").config();
 
 const express = require("express");
 const bodyParser = require('body-parser');
+var cors = require('cors')
 const app = express();
 const port = 8080;
 
@@ -21,6 +22,8 @@ connect()
     .then(() => {
         // Configure o body-parser para tratar dados JSON e urlencoded
         app.use(bodyParser.json());
+        app.use(cors());
+
         app.use(bodyParser.urlencoded({ extended: true }));
 
         // Defina a rota para login
