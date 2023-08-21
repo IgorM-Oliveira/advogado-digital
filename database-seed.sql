@@ -5610,7 +5610,7 @@ INSERT INTO `cidades` (`id`, `nome`, `id_estado`) VALUES
 (5563, 'Wanderlândia', 27),
 (5564, 'Xambioá', 27);
 
-CREATE TABLE processos
+    CREATE TABLE processos
 (
     id SERIAL PRIMARY KEY,
     numero INTEGER,
@@ -5630,6 +5630,14 @@ CREATE TABLE advogados
     id_estado INTEGER REFERENCES estados(id),
     id_cidade INTEGER REFERENCES cidades(id),
     nome TEXT,
+    cpf int,
+    data_nasc date,
+    sexo int,
+    emial TEXT,
+    cep int,
+    bairro text,
+    complemento text,
+    cidade text,
     contato INTEGER,
     logradouro TEXT,
     endereco TEXT,
@@ -5638,14 +5646,13 @@ CREATE TABLE advogados
     senha TEXT,
     estadLogin TEXT,
     dataCadastro DATE,
-    areas TEXT,
-    processo_id INTEGER REFERENCES processos(id)
+    areas TEXT
 );
 
-INSERT INTO advogados (id_estado, id_cidade, nome, contato, logradouro, endereco, numberEnde, numAdv, senha, estadLogin, dataCadastro, areas, processo_id) VALUES
-  (1, 1, 'João Silva', 99999999, 'Rua A', '123', 10, '1234', 'senha123', 'ativo', '2022-01-01', 'Criminal', 1),
-  (1, 2, 'Maria Santos', 88888888, 'Rua B', '456', 20, '5678', 'senha456', 'inativo', '2022-02-01', 'Trabalhista', NULL),
-  (2, 3, 'Pedro Souza', 77777777, 'Rua C', '789', 30, '91011', 'senha789', 'ativo', '2022-03-01', 'Civil', 2);
+INSERT INTO advogados (id_estado, id_cidade, nome, contato, logradouro, endereco, numberEnde, numAdv, senha, estadLogin, dataCadastro, areas) VALUES
+  (1, 1, 'João Silva', 99999999, 'Rua A', '123', 10, '1234', 'senha123', 'ativo', '2022-01-01', 'Criminal'),
+  (1, 2, 'Maria Santos', 88888888, 'Rua B', '456', 20, '5678', 'senha456', 'inativo', '2022-02-01', 'Trabalhista'),
+  (2, 3, 'Pedro Souza', 77777777, 'Rua C', '789', 30, '91011', 'senha789', 'ativo', '2022-03-01', 'Civil');
 
 CREATE TABLE clientes
 (
@@ -5653,19 +5660,27 @@ CREATE TABLE clientes
     id_estado INTEGER REFERENCES estados(id),
     id_cidade INTEGER REFERENCES cidades(id),
     nome TEXT,
+    cpf int,
+    data_nasc date,
+    sexo int,
+    emial TEXT,
+    cep int,
+    bairro text,
+    complemento text,
+    cidade text,
     contato INTEGER,
     logradouro TEXT,
     endereco TEXT,
+    senha TEXT,
     numberEnde INTEGER,
     dataNasc DATE,
-    tipo INTEGER,
-    processo_id INTEGER REFERENCES processos(id)
+    tipo INTEGER
 );
 
-INSERT INTO clientes (id_estado, id_cidade, nome, contato, logradouro, endereco, numberEnde, dataNasc, tipo, processo_id) VALUES
-  (1, 1, 'Ana Oliveira', 66666666, 'Rua X', '987', 40, '1990-01-01', 1, 1),
-  (2, 4, 'Carlos Rodrigues', 55555555, 'Rua Y', '654', 50, '1985-02-01', 2, NULL),
-  (3, 6, 'Mariana Santos', 44444444, 'Rua Z', '321', 60, '2000-03-01', 1, 3);
+INSERT INTO clientes (id_estado, id_cidade, nome, contato, logradouro, endereco, numberEnde, dataNasc, tipo) VALUES
+  (1, 1, 'Ana Oliveira', 66666666, 'Rua X', '987', 40, '1990-01-01', 1),
+  (2, 4, 'Carlos Rodrigues', 55555555, 'Rua Y', '654', 50, '1985-02-01', 2),
+  (3, 6, 'Mariana Santos', 44444444, 'Rua Z', '321', 60, '2000-03-01', 1);
 
 CREATE TABLE partes
 (

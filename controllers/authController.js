@@ -9,11 +9,11 @@ exports.login = async (req, res) => {
         const advogado = await Advogado.buscarPorNumeroEsenha(user, senha);
 
         if (advogado) {
-            const payload = req.body;
+            const payload = {nome: advogado.nome, id: advogado.id};
 
             const token_validator = jwt.sign(payload, jwtSecret, { expiresIn: '1h' });
 
-            res.json({ token: token_validator });
+            res.json({ status: 201, authTokens: token_validator });
         } else {
             res.status(401).json({ error: 'Credenciais inválidas' });
         }
