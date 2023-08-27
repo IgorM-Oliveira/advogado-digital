@@ -5649,10 +5649,10 @@ CREATE TABLE advogados
     areas TEXT
 );
 
-INSERT INTO advogados (id_estado, id_cidade, nome, contato, logradouro, endereco, numberEnde, numAdv, senha, estadLogin, dataCadastro, areas) VALUES
-  (1, 1, 'João Silva', 99999999, 'Rua A', '123', 10, '1234', 'senha123', 'ativo', '2022-01-01', 'Criminal'),
-  (1, 2, 'Maria Santos', 88888888, 'Rua B', '456', 20, '5678', 'senha456', 'inativo', '2022-02-01', 'Trabalhista'),
-  (2, 3, 'Pedro Souza', 77777777, 'Rua C', '789', 30, '91011', 'senha789', 'ativo', '2022-03-01', 'Civil');
+INSERT INTO public.advogados (id, id_estado, id_cidade, nome, cpf, data_nasc, sexo, emial, cep, bairro, complemento, cidade, contato, logradouro, endereco, numberende, numadv, senha, estadlogin, datacadastro, areas) VALUES
+    (1, 1, 1, 'João Silva', '11369394071', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 99999999, 'Rua A', '123', 10, '1234', 'senha123', 'ativo', '2022-01-01', 'Criminal'),
+    (2, 1, 2, 'Maria Santos', '74032672067', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 88888888, 'Rua B', '456', 20, '5678', 'senha456', 'inativo', '2022-02-01', 'Trabalhista'),
+    (3, 2, 3, 'Pedro Souza', '01232766089', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 77777777, 'Rua C', '789', 30, '91011', 'senha789', 'ativo', '2022-03-01', 'Civil');
 
 CREATE TABLE clientes
 (
@@ -5677,10 +5677,10 @@ CREATE TABLE clientes
     tipo INTEGER
 );
 
-INSERT INTO clientes (id_estado, id_cidade, nome, contato, logradouro, endereco, numberEnde, dataNasc, tipo) VALUES
-  (1, 1, 'Ana Oliveira', 66666666, 'Rua X', '987', 40, '1990-01-01', 1),
-  (2, 4, 'Carlos Rodrigues', 55555555, 'Rua Y', '654', 50, '1985-02-01', 2),
-  (3, 6, 'Mariana Santos', 44444444, 'Rua Z', '321', 60, '2000-03-01', 1);
+INSERT INTO public.clientes (id, id_estado, id_cidade, nome, cpf, data_nasc, sexo, emial, cep, bairro, complemento, cidade, contato, logradouro, endereco, senha, numberende, datanasc, tipo) VALUES
+    (1, 1, 1, 'Ana Oliveira', '72997710049', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 66666666, 'Rua X', '987', NULL, 40, '1990-01-01', 1),
+    (2, 2, 4, 'Carlos Rodrigues', '32903351007', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 55555555, 'Rua Y', '654', NULL, 50, '1985-02-01', 2),
+    (3, 3, 6, 'Mariana Santos', '67332846004', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 44444444, 'Rua Z', '321', NULL, 60, '2000-03-01', 1);
 
 CREATE TABLE partes
 (

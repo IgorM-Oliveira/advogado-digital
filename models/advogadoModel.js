@@ -23,54 +23,43 @@ class Advogado {
             const results = await client.query("SELECT * FROM advogados");
             return results.rows;
         } catch (error) {
-            console.error("Falha ao buscar os advogados:", error);
-            throw new Error("Falha ao buscar os advogados");
+            return false;
         }
     }
 
     static async obterPorId(id) {
         try {
             const result = await client.query("SELECT * FROM advogados WHERE id = $1", [id]);
-            if (result.rows.length > 0) {
-                return result.rows[0];
-            } else {
-                throw new Error("Advogado não encontrado");
-            }
+            return result.rows[0];
         } catch (error) {
-            console.error("Falha ao obter o advogado:", error);
-            throw new Error("Falha ao obter o advogado");
+            return false;
         }
     }
 
     static async criar(novoAdvogado) {
-        const { id_estado, id_cidade, nome, contato, logradouro, endereco, numberEnde, numAdv, senha, estadLogin, dataCadastro, areas, processo_id } = novoAdvogado;
+        const { nome, cpf, data_nasc, sexo, emial, cep, bairro, complemento, cidade, contato, logradouro, endereco, numberende, numadv, senha, estadlogin, datacadastro, areas } = novoAdvogado;
         try {
             const result = await client.query(
-                "INSERT INTO advogados (id_estado, id_cidade, nome, contato, logradouro, endereco, numberEnde, numAdv, senha, estadLogin, dataCadastro, areas, processo_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING *",
-                [id_estado, id_cidade, nome, contato, logradouro, endereco, numberEnde, numAdv, senha, estadLogin, dataCadastro, areas, processo_id]
+                "INSERT INTO advogados (nome, cpf, data_nasc, sexo, emial, cep, bairro, complemento, cidade, contato, logradouro, endereco, numberende, numadv, senha, estadlogin, datacadastro, areas) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18) RETURNING *",
+                [nome, cpf, data_nasc, sexo, emial, cep, bairro, complemento, cidade, contato, logradouro, endereco, numberende, numadv, senha, estadlogin, datacadastro, areas]
             );
             return result.rows[0];
         } catch (error) {
-            console.error("Falha ao criar o advogado:", error);
-            throw new Error("Falha ao criar o advogado");
+            return false;
         }
     }
 
     static async atualizar(id, dadosAtualizados) {
-        const { id_estado, id_cidade, nome, contato, logradouro, endereco, numberEnde, numAdv, senha, estadLogin, dataCadastro, areas, processo_id } = dadosAtualizados;
+        const { id_estado, id_cidade, nome, cpf, data_nasc, sexo, emial, cep, bairro, complemento, cidade, contato, logradouro, endereco, numberende, numadv, senha, estadlogin, datacadastro, areas } = dadosAtualizados;
+
         try {
-            const result = await client.query(
-                "UPDATE advogados SET id_estado = $1, id_cidade = $2, nome = $3, contato = $4, logradouro = $5, endereco = $6, numberEnde = $7, numAdv = $8, senha = $9, estadLogin = $10, dataCadastro = $11, areas = $12, processo_id = $13 WHERE id = $14 RETURNING *",
-                [id_estado, id_cidade, nome, contato, logradouro, endereco, numberEnde, numAdv, senha, estadLogin, dataCadastro, areas, processo_id, id]
+            await client.query(
+                "UPDATE public.advogados SET id_estado=$2, id_cidade=$3, nome=$4, cpf=$5, data_nasc=$6, sexo=$7, emial=$8, cep=$9, bairro=$10, complemento=$11, cidade=$12, contato=$13, logradouro=$14, endereco=$15, numberende=$16, numadv=$17, senha=$18, estadlogin=$19, datacadastro=$20, areas=$21 WHERE id=$1",
+                [id, id_estado, id_cidade, nome, cpf, data_nasc, sexo, emial, cep, bairro, complemento, cidade, contato, logradouro, endereco, numberende, numadv, senha, estadlogin, datacadastro, areas]
             );
-            if (result.rows.length > 0) {
-                return result.rows[0];
-            } else {
-                throw new Error("Advogado não encontrado");
-            }
+            return true;
         } catch (error) {
-            console.error("Falha ao atualizar o advogado:", error);
-            throw new Error("Falha ao atualizar o advogado");
+            return false;
         }
     }
 
@@ -80,17 +69,16 @@ class Advogado {
             if (result.rows.length > 0) {
                 return result.rows[0];
             } else {
-                throw new Error("Advogado não encontrado");
+                console.error("Advogado não encontrado");
             }
         } catch (error) {
-            console.error("Falha ao excluir o advogado:", error);
-            throw new Error("Falha ao excluir o advogado");
+            return false;
         }
     }
 
-    static async buscarPorNumeroEsenha(numAdv, senha) {
+    static async authLogin(cpf, senha) {
         try {
-            const result = await client.query('SELECT * FROM advogados WHERE numAdv like $1 AND senha like $2', [numAdv, senha]);
+            const result = await client.query('SELECT * FROM advogados WHERE cpf like $1 AND senha like $2', [cpf, senha]);
 
             if (result.rows.length > 0) {
                 return result.rows[0];
@@ -98,8 +86,7 @@ class Advogado {
                 return null;
             }
         } catch (error) {
-            console.error('Erro ao buscar advogado:', error);
-            throw new Error('Erro ao buscar advogado');
+            return false;
         }
     }
 }

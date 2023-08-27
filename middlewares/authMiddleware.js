@@ -12,7 +12,7 @@ module.exports = (req, res, next) => {
 
     jwt.verify(data[1], jwtSecret, (err, decoded) => {
         if (err) {
-            return res.status(401).json({ message: 'Token inválido' });
+            return res.status(403).json({ message: 'Token inválido' });
         }
         req.userId = decoded.id;
         next();

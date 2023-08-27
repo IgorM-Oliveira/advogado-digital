@@ -2,14 +2,20 @@ module.exports = {
     development: {
         client: 'pg', // or any other supported database client
         connection: {
-            host: '127.0.0.1',
-            user: 'your_db_user',
-            password: 'your_db_password',
-            database: 'your_db_name',
+            connectionString: config.DATABASE_URL,
+            host: config["DB_HOST"],
+            port: config["DB_PORT"],
+            user: config["DB_USER"],
+            database: config["DB_NAME"],
+            password: config["DB_PASSWORD"],
+
+            host: 'postgres',
+            user: 'root',
+            password: 'root',
+            database: 'root',
         },
         migrations: {
             directory: './migrations',
         },
     },
-    // ... other environments like test and production
 };
