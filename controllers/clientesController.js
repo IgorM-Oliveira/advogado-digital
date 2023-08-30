@@ -10,6 +10,17 @@ exports.listarClientes = async (req, res) => {
     }
 };
 
+// Listar todos os clientes vinculados
+exports.listarClientesVinculados = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const clientes = await Cliente.listarTodosVinculados(id);
+        res.json(clientes);
+    } catch (error) {
+        res.status(403).json({ error: "Falha ao buscar os clientes" });
+    }
+};
+
 // Obter um cliente pelo ID
 exports.obterCliente = async (req, res) => {
     const { id } = req.params;

@@ -8,6 +8,9 @@ router.use(authMiddleware);
 // Listar todos os clientes
 router.get("/", clientesController.listarClientes);
 
+// Listar todos os clientes vinculados
+router.get("/vinculados/:id", clientesController.listarClientesVinculados);
+
 // Obter um cliente pelo ID
 router.get("/:id", clientesController.obterCliente);
 

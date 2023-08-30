@@ -37,12 +37,13 @@ class Advogado {
     }
 
     static async criar(novoAdvogado) {
-        const { nome, cpf, data_nasc, sexo, emial, cep, bairro, complemento, cidade, contato, logradouro, endereco, numberende, numadv, senha, estadlogin, datacadastro, areas } = novoAdvogado;
+        const { nome, contato, cpf, data_nasc, sexo, logradouro, endereco, cep, numberEnde, complemento, cidade, bairro, emial, senha } = novoAdvogado;
         try {
             const result = await client.query(
-                "INSERT INTO advogados (nome, cpf, data_nasc, sexo, emial, cep, bairro, complemento, cidade, contato, logradouro, endereco, numberende, numadv, senha, estadlogin, datacadastro, areas) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18) RETURNING *",
-                [nome, cpf, data_nasc, sexo, emial, cep, bairro, complemento, cidade, contato, logradouro, endereco, numberende, numadv, senha, estadlogin, datacadastro, areas]
+                "INSERT INTO advogados (nome, contato, cpf, data_nasc, sexo, logradouro, endereco, cep, numberEnde, complemento, cidade, bairro, emial, senha) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) RETURNING *",
+                [nome, contato, cpf, data_nasc, sexo, logradouro, endereco, cep === undefined ? cep : null, numberEnde === undefined ? numberEnde : null, complemento === undefined ? complemento : null, cidade, bairro, emial, senha]
             );
+
             return result.rows[0];
         } catch (error) {
             return false;
