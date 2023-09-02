@@ -6,8 +6,28 @@ exports.listarProcessos = async (req, res) => {
         const processos = await Processo.listarTodos();
         res.json(processos);
     } catch (error) {
-        console.error("Falha ao buscar os processos:", error);
         res.status(500).json({ error: "Falha ao buscar os processos" });
+    }
+};
+
+// Listar todos os processos vinculados
+exports.listarProcessosVinculados = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const processos = await Processo.listarTodosVinculados(id);
+        res.json(processos);
+    } catch (error) {
+        res.status(500).json({ error: "Falha ao buscar os processos vinculados" });
+    }
+};
+
+// Listar todos os tipos de processos
+exports.listarTiposProcessos = async (req, res) => {
+    try {
+        const processos = await Processo.listarTodosTipos();
+        res.json(processos);
+    } catch (error) {
+        res.status(500).json({ error: "Falha ao buscar os tipos de processos" });
     }
 };
 
@@ -18,20 +38,17 @@ exports.obterProcesso = async (req, res) => {
         const processo = await Processo.obterPorId(id);
         res.json(processo);
     } catch (error) {
-        console.error("Falha ao obter o processo:", error);
         res.status(500).json({ error: "Falha ao obter o processo" });
     }
 };
 
 // Criar um novo processo
 exports.criarProcesso = async (req, res) => {
-    const { numero, comanda, tipo } = req.body;
-    const novoProcesso = { numero, comanda, tipo };
+    const novoProcesso = req.body;
     try {
         const processoCriado = await Processo.criar(novoProcesso);
         res.status(201).json(processoCriado);
     } catch (error) {
-        console.error("Falha ao criar o processo:", error);
         res.status(500).json({ error: "Falha ao criar o processo" });
     }
 };
@@ -39,13 +56,11 @@ exports.criarProcesso = async (req, res) => {
 // Atualizar um processo
 exports.atualizarProcesso = async (req, res) => {
     const { id } = req.params;
-    const { numero, comanda, tipo } = req.body;
-    const dadosAtualizados = { numero, comanda, tipo };
+    const dadosAtualizados = req.body;
     try {
         const processoAtualizado = await Processo.atualizar(id, dadosAtualizados);
         res.json(processoAtualizado);
     } catch (error) {
-        console.error("Falha ao atualizar o processo:", error);
         res.status(500).json({ error: "Falha ao atualizar o processo" });
     }
 };
@@ -57,7 +72,6 @@ exports.excluirProcesso = async (req, res) => {
         const processoExcluido = await Processo.excluir(id);
         res.json(processoExcluido);
     } catch (error) {
-        console.error("Falha ao excluir o processo:", error);
         res.status(500).json({ error: "Falha ao excluir o processo" });
     }
 };

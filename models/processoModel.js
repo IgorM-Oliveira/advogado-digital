@@ -13,36 +13,56 @@ class Processo {
             const results = await client.query("SELECT * FROM processos");
             return results.rows;
         } catch (error) {
-            console.error("Falha ao buscar os processos:", error);
-            throw new Error("Falha ao buscar os processos");
+            return false;
+        }
+    }
+
+    static async listarTodosVinculados(id) {
+        try {
+            const results = await client.query("select p.id, p.numero, p.comanda, p.tipo from public.processos p join vinculovp vp on p.id = vp.id_processo join vinculoac ac on vp.id_vinculo = ac.id join advogados a on ac.id_advogado = a.id where a.id = $1 group by p.id, p.numero, p.comanda, p.tipo", [id]);
+            return results.rows;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    static async listarTodosTipos() {
+        try {
+            const results = await client.query("SELECT * FROM tipo_processo");
+            return results.rows;
+        } catch (error) {
+            return false;
         }
     }
 
     static async obterPorId(id) {
         try {
             const result = await client.query("SELECT * FROM processos WHERE id = $1", [id]);
-            if (result.rows.length > 0) {
-                return result.rows[0];
-            } else {
-                throw new Error("Processo não encontrado");
-            }
+            return result.rows[0];
         } catch (error) {
-            console.error("Falha ao obter o processo:", error);
-            throw new Error("Falha ao obter o processo");
+            return false;
         }
     }
 
     static async criar(novoProcesso) {
+        console.log(novoProcesso)
         const { numero, comanda, tipo } = novoProcesso;
         try {
             const result = await client.query(
                 "INSERT INTO processos (numero, comanda, tipo) VALUES ($1, $2, $3) RETURNING *",
                 [numero, comanda, tipo]
             );
+
+            for (const item of novoProcesso.clientes_vinculados) {
+                await client.query(
+                    "INSERT INTO public.vinculovp (id_vinculo, id_processo) VALUES ($1, $2) RETURNING *",
+                    [item, result.rows[0].id]
+                );
+            }
+
             return result.rows[0];
         } catch (error) {
-            console.error("Falha ao criar o processo:", error);
-            throw new Error("Falha ao criar o processo");
+            return false;
         }
     }
 
@@ -53,28 +73,17 @@ class Processo {
                 "UPDATE processos SET numero = $1, comanda = $2, tipo = $3 WHERE id = $4 RETURNING *",
                 [numero, comanda, tipo, id]
             );
-            if (result.rows.length > 0) {
-                return result.rows[0];
-            } else {
-                throw new Error("Processo não encontrado");
-            }
+            return true;
         } catch (error) {
-            console.error("Falha ao atualizar o processo:", error);
-            throw new Error("Falha ao atualizar o processo");
+            return false;
         }
     }
 
     static async excluir(id) {
         try {
-            const result = await client.query("DELETE FROM processos WHERE id = $1 RETURNING *", [id]);
-            if (result.rows.length > 0) {
-                return result.rows[0];
-            } else {
-                throw new Error("Processo não encontrado");
-            }
+            return await client.query("DELETE FROM processos WHERE id = $1 RETURNING *", [id]);
         } catch (error) {
-            console.error("Falha ao excluir o processo:", error);
-            throw new Error("Falha ao excluir o processo");
+            return false;
         }
     }
 }

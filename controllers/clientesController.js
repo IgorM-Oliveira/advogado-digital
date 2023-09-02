@@ -6,8 +6,18 @@ exports.listarClientes = async (req, res) => {
         const clientes = await Cliente.listarTodos();
         res.json(clientes);
     } catch (error) {
-        console.error("Falha ao buscar os clientes:", error);
-        res.status(500).json({ error: "Falha ao buscar os clientes" });
+        res.status(403).json({ error: "Falha ao buscar os clientes" });
+    }
+};
+
+// Listar todos os clientes vinculados
+exports.listarClientesVinculados = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const clientes = await Cliente.listarTodosVinculados(id);
+        res.json(clientes);
+    } catch (error) {
+        res.status(403).json({ error: "Falha ao buscar os clientes" });
     }
 };
 
@@ -18,8 +28,7 @@ exports.obterCliente = async (req, res) => {
         const cliente = await Cliente.obterPorId(id);
         res.json(cliente);
     } catch (error) {
-        console.error("Falha ao obter o cliente:", error);
-        res.status(500).json({ error: "Falha ao obter o cliente" });
+        res.status(403).json({ error: "Falha ao obter o cliente" });
     }
 };
 
@@ -28,9 +37,13 @@ exports.criarCliente = async (req, res) => {
     const novoCliente = req.body;
     try {
         const clienteCriado = await Cliente.criar(novoCliente);
-        res.status(201).json(clienteCriado);
+
+        if (clienteCriado) {
+            res.status(201).json(clienteCriado);
+        } else {
+            res.status(500).json({ error: "Falha ao criar o cliente" });
+        }
     } catch (error) {
-        console.error("Falha ao criar o cliente:", error);
         res.status(500).json({ error: "Falha ao criar o cliente" });
     }
 };
@@ -38,14 +51,17 @@ exports.criarCliente = async (req, res) => {
 // Atualizar um cliente
 exports.atualizarCliente = async (req, res) => {
     const { id } = req.params;
-    const { nome, email } = req.body;
-    const dadosAtualizados = { nome, email };
+    const dadosAtualizados = req.body;
     try {
         const clienteAtualizado = await Cliente.atualizar(id, dadosAtualizados);
-        res.json(clienteAtualizado);
+
+        if (clienteAtualizado) {
+            res.status(201).json({ response: "Atualização executada" });
+        } else {
+            res.status(401).json({ response: 'Erro encontrado na atualização' });
+        }
     } catch (error) {
-        console.error("Falha ao atualizar o cliente:", error);
-        res.status(500).json({ error: "Falha ao atualizar o cliente" });
+        res.status(403).json({ error: "Falha ao atualizar o cliente" });
     }
 };
 
@@ -56,7 +72,6 @@ exports.excluirCliente = async (req, res) => {
         const clienteExcluido = await Cliente.excluir(id);
         res.json(clienteExcluido);
     } catch (error) {
-        console.error("Falha ao excluir o cliente:", error);
-        res.status(500).json({ error: "Falha ao excluir o cliente" });
+        res.status(403).json({ error: "Falha ao excluir o cliente" });
     }
 };
