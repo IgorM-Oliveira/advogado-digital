@@ -43,9 +43,9 @@ class Cliente {
     }
 
     static async criar(novoCliente) {
-        novoCliente.cep = novoCliente.cep === '' ? null : parseInt(novoCliente.cep)
-        novoCliente.contato = novoCliente.contato === '' ? null : parseInt(novoCliente.contato)
-        novoCliente.numberEnde = novoCliente.numberEnde === '' ? null : parseInt(novoCliente.numberEnde)
+        novoCliente.cep = novoCliente.cep == '' ? null : parseInt(novoCliente.cep)
+        novoCliente.contato = novoCliente.contato == '' ? null : parseInt(novoCliente.contato)
+        novoCliente.numberEnde = novoCliente.numberEnde == '' ? null : parseInt(novoCliente.numberEnde)
 
         const { advogado_id, nome, contato, cpf, data_nasc, sexo, logradouro, endereco, cep, numberEnde, complemento, cidade, bairro, emial, senha } = novoCliente;
 

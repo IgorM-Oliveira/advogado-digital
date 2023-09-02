@@ -37,9 +37,14 @@ exports.criarCliente = async (req, res) => {
     const novoCliente = req.body;
     try {
         const clienteCriado = await Cliente.criar(novoCliente);
-        res.status(201).json(clienteCriado);
+
+        if (clienteCriado) {
+            res.status(201).json(clienteCriado);
+        } else {
+            res.status(500).json({ error: "Falha ao criar o cliente" });
+        }
     } catch (error) {
-        res.status(403).json({ error: "Falha ao criar o cliente" });
+        res.status(500).json({ error: "Falha ao criar o cliente" });
     }
 };
 

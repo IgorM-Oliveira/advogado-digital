@@ -8,6 +8,12 @@ router.use(authMiddleware);
 // Listar todos os processos
 router.get("/", processosController.listarProcessos);
 
+// Listar todos os processos vinculados
+router.get("/vinculados/:id", processosController.listarProcessosVinculados);
+
+// Listar todos os tipos de processos
+router.get("/tipos", processosController.listarTiposProcessos);
+
 // Obter um cliente pelo ID
 router.get("/:id", processosController.obterProcesso);
 
