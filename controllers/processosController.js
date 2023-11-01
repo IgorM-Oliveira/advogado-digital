@@ -1,3 +1,6 @@
+const path = require("path");
+const fs = require("fs");
+
 const Processo = require("../models/processoModel");
 
 // Listar todos os processos
@@ -73,5 +76,37 @@ exports.excluirProcesso = async (req, res) => {
         res.json(processoExcluido);
     } catch (error) {
         res.status(500).json({ error: "Falha ao excluir o processo" });
+    }
+};
+
+exports.uploadProcesso = async (req, res) => {
+    const { id } = req.params;
+    const arquivoPDF = req.file;
+
+    try {
+        // Verifica se o arquivo foi enviado
+        if (!arquivoPDF) {
+            return res.status(400).json({ error: "Nenhum arquivo foi enviado." });
+        }
+
+        // Move o arquivo para o diretório adequado (por exemplo, uploads/pdfs)
+        const pastaUploads = path.join(__dirname, "../uploads/pdfs");
+        if (!fs.existsSync(pastaUploads)) {
+            fs.mkdirSync(pastaUploads, { recursive: true });
+        }
+
+        const caminhoArquivo = path.join(pastaUploads, arquivoPDF.filename);
+        fs.renameSync(arquivoPDF.path, caminhoArquivo);
+
+        // Atualiza o processo no banco de dados com o caminho do arquivo PDF
+        const processoAtualizado = await Processo.vincularArquivoPDF(id, caminhoArquivo);
+
+        if (processoAtualizado) {
+            return res.status(200).json({ message: "Arquivo PDF vinculado com sucesso ao processo." });
+        } else {
+            return res.status(500).json({ error: "Falha ao vincular o arquivo PDF ao processo." });
+        }
+    } catch (error) {
+        res.status(500).json({ error: "Falha ao vincular o arquivo PDF ao processo: " + error.message });
     }
 };

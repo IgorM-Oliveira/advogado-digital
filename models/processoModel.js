@@ -86,6 +86,24 @@ class Processo {
             return false;
         }
     }
+
+    static async vincularArquivoPDF(id, caminhoArquivo) {
+        try {
+            const result = await client.query(
+                "INSERT INTO procupload (id_processo, caminho_pdf) VALUES ($1, $2) RETURNING *",
+                [id, caminhoArquivo]
+            );
+
+            if (result.rows.length > 0) {
+                return result.rows[0];
+            } else {
+                return null;
+            }
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
 }
 
 module.exports = Processo;

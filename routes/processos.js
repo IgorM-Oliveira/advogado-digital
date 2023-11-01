@@ -3,6 +3,11 @@ const router = express.Router();
 const processosController = require("../controllers/processosController");
 const authMiddleware = require('../middlewares/authMiddleware');
 
+const { storage } = require("../multerConfig")
+
+const multer = require('multer');
+const upload = multer({ storage: storage });
+
 router.use(authMiddleware);
 
 // Listar todos os processos
@@ -25,5 +30,8 @@ router.put("/:id", processosController.atualizarProcesso);
 
 // Excluir um cliente
 router.delete("/:id", processosController.excluirProcesso);
+
+// Upload de arquivos
+router.post('/upload/:id', upload.single("file"), processosController.uploadProcesso);
 
 module.exports = router;
