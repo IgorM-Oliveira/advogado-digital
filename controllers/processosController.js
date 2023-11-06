@@ -79,6 +79,17 @@ exports.excluirProcesso = async (req, res) => {
     }
 };
 
+// Criar um novo processo
+exports.uploadProcessoRemove = async (req, res) => {
+    const relations = req.body;
+    try {
+        const processoRelations = await Processo.removeRelations(relations);
+        res.status(201).json(processoRelations);
+    } catch (error) {
+        res.status(500).json({ error: "Falha ao criar o processo" });
+    }
+};
+
 exports.uploadProcesso = async (req, res) => {
     const { id } = req.params;
     const arquivoPDF = req.file;
@@ -99,7 +110,7 @@ exports.uploadProcesso = async (req, res) => {
         fs.renameSync(arquivoPDF.path, caminhoArquivo);
 
         // Atualiza o processo no banco de dados com o caminho do arquivo PDF
-        const processoAtualizado = await Processo.vincularArquivoPDF(id, caminhoArquivo);
+        const processoAtualizado = await Processo.vincularArquivoPDF(id, caminhoArquivo, arquivoPDF.originalname);
 
         if (processoAtualizado) {
             return res.status(200).json({ message: "Arquivo PDF vinculado com sucesso ao processo." });

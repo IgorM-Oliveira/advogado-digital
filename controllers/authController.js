@@ -15,8 +15,6 @@ exports.login = async (req, res) => {
 
             const token_validator = jwt.sign(payload, jwtSecret, { expiresIn: '1h' });
 
-            console.log(token_validator)
-
             res.json({ status: 201, authTokens: token_validator });
         } else {
             res.status(401).json({ error: 'Credenciais inválidas' });
@@ -30,7 +28,6 @@ exports.login = async (req, res) => {
 exports.login_cliente = async (req, res) => {
     const {user, senha} = req.body;
     try {
-        console.log(user, senha)
         const advogado = await Cliente.authLogin(user, senha);
 
         if (advogado) {

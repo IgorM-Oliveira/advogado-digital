@@ -31,6 +31,9 @@ router.put("/:id", processosController.atualizarProcesso);
 // Excluir um cliente
 router.delete("/:id", processosController.excluirProcesso);
 
+// Excluir um cliente
+router.post("/upload/remove/:id", processosController.uploadProcessoRemove);
+
 // Upload de arquivos
 router.post('/upload/:id', upload.single("file"), processosController.uploadProcesso);
 

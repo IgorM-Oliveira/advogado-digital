@@ -26,7 +26,7 @@ class Cliente {
 
     static async listarTodosVinculados(id) {
         try {
-            const results = await client.query("SELECT * FROM clientes join vinculoac on clientes.id = vinculoac.id_cliente where vinculoac.id_advogado = $1", [id]);
+            const results = await client.query("SELECT clientes.* FROM clientes join vinculoac on clientes.id = vinculoac.id_cliente where vinculoac.id_advogado = $1", [id]);
             return results.rows;
         } catch (error) {
             return false;
