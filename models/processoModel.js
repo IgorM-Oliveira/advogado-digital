@@ -48,7 +48,7 @@ class Processo {
     static async obterPorId(id) {
         try {
             const result = await client.query("SELECT * FROM processos WHERE id = $1", [id]);
-            const resultCliente = await client.query("select ac.id cliente from public.processos p join vinculovp vp on p.id = vp.id_processo join vinculoac ac on vp.id_vinculo = ac.id join advogados a on ac.id_advogado = a.id where p.id = $1 group by ac.id", [id]);
+            const resultCliente = await client.query("select ac.id_cliente cliente from public.processos p join vinculovp vp on p.id = vp.id_processo join vinculoac ac on vp.id_vinculo = ac.id join advogados a on ac.id_advogado = a.id where p.id = $1 group by ac.id_cliente", [id]);
             const resultUpload = await client.query("select id, id_processo, caminho_pdf, filename from public.procupload p where id_processo = $1", [id]);
 
             const cliente = []
