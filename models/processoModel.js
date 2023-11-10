@@ -77,17 +77,19 @@ class Processo {
     }
 
     static async criar(novoProcesso) {
-        const { numero, comanda, tipo } = novoProcesso;
+        const { numero, comanda, tipo, inicio, fim, resumo } = novoProcesso;
         try {
             const result = await client.query(
-                "INSERT INTO processos (numero, comanda, tipo) VALUES ($1, $2, $3) RETURNING *",
-                [numero, comanda, tipo]
+                "INSERT INTO processos (numero, comanda, tipo, inicio, fim, resumo) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+                [numero, comanda, tipo, inicio, fim, resumo]
             );
 
             for (const item of novoProcesso.clientes_vinculados) {
+                const vinculo = await client.query("select id from vinculoac v where id_advogado = $1 and id_cliente = $2", [novoProcesso.advogado, item]);
+                
                 await client.query(
                     "INSERT INTO public.vinculovp (id_vinculo, id_processo) VALUES ($1, $2) RETURNING *",
-                    [item, result.rows[0].id]
+                    [vinculo.rows[0].id, result.rows[0].id]
                 );
             }
 
@@ -98,11 +100,11 @@ class Processo {
     }
 
     static async atualizar(id, dadosAtualizados) {
-        const { numero, comanda, tipo } = dadosAtualizados;
+        const { numero, comanda, tipo, inicio, fim, resumo } = dadosAtualizados;
         try {
-            const result = await client.query(
-                "UPDATE processos SET numero = $1, comanda = $2, tipo = $3 WHERE id = $4 RETURNING *",
-                [numero, comanda, tipo, id]
+            await client.query(
+                "UPDATE processos SET numero = $1, comanda = $2, tipo = $3, inicio = $4, fim = $5, resumo = $6 WHERE id = $7 RETURNING *",
+                [numero, comanda, tipo, inicio, fim, resumo, id]
             );
             return true;
         } catch (error) {
@@ -113,6 +115,25 @@ class Processo {
     static async excluir(id) {
         try {
             return await client.query("DELETE FROM processos WHERE id = $1 RETURNING *", [id]);
+        } catch (error) {
+            return false;
+        }
+    }
+    
+    static async insertRelations(data) {
+        try {
+            let result = null;
+            for (const relation of data) {
+                try {
+                    await client.query(
+                      "INSERT INTO public.procupload (id_processo, caminho_pdf, filename) VALUES ($1, $2, $3) RETURNING *",
+                      [relation.id_processo, relation.caminho_pdf, relation.filename]
+                    );
+                } catch (e) {
+                    console.log(e)
+                }
+            }
+            return result
         } catch (error) {
             return false;
         }

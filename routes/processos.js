@@ -32,7 +32,10 @@ router.put("/:id", processosController.atualizarProcesso);
 // Excluir um cliente
 router.delete("/:id", processosController.excluirProcesso);
 
-// Excluir um cliente
+// Criar uma relação
+router.post("/upload/insert", processosController.uploadProcessoInsert);
+
+// Excluir uma relação
 router.post("/upload/remove/:id", processosController.uploadProcessoRemove);
 
 // Upload de arquivos
@@ -42,13 +45,8 @@ router.post('/upload/:id', upload.single("file"), processosController.uploadProc
 router.post('/getDiarioOficial', async (req, res) => {
   try {
     const formData = req.body;
-    
-    const response = await axios.post('https://www.spdo.ms.gov.br/DiarioDOE/Index/Index/1', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        'Access-Control-Allow-Origin': 'https://www.spdo.ms.gov.br',
-      },
-    });
+
+    const response = await axios.post('https://www.spdo.ms.gov.br/DiarioDOE/Index/Index/1', formData);
     
     res.json(response.data);
   } catch (error) {

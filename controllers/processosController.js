@@ -79,7 +79,18 @@ exports.excluirProcesso = async (req, res) => {
     }
 };
 
-// Criar um novo processo
+// Criar um nova relação
+exports.uploadProcessoInsert = async (req, res) => {
+    const relations = req.body;
+    try {
+        const processoRelations = await Processo.insertRelations(relations);
+        res.status(201).json(processoRelations);
+    } catch (error) {
+        res.status(500).json({ error: "Falha ao criar o processo" });
+    }
+};
+
+// Remover uma relação
 exports.uploadProcessoRemove = async (req, res) => {
     const relations = req.body;
     try {
@@ -90,6 +101,7 @@ exports.uploadProcessoRemove = async (req, res) => {
     }
 };
 
+// Atualizar uma relação
 exports.uploadProcesso = async (req, res) => {
     const { id } = req.params;
     const arquivoPDF = req.file;
