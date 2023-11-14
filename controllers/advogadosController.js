@@ -6,7 +6,7 @@ exports.listarAdvogados = async (req, res) => {
         const advogados = await Advogado.listarTodos();
         res.json(advogados);
     } catch (error) {
-        res.status(403).json({ error: "Falha ao buscar os advogados" });
+        res.status(500).json({ error: `Falha ao buscar os advogados: ${error.message}` });
     }
 };
 
@@ -17,7 +17,7 @@ exports.obterAdvogado = async (req, res) => {
         const advogado = await Advogado.obterPorId(id);
         res.json(advogado);
     } catch (error) {
-        res.status(403).json({ error: "Falha ao obter o advogado" });
+        res.status(500).json({ error: `Falha ao obter o advogado: ${error.message}` });
     }
 };
 
@@ -28,7 +28,7 @@ exports.criarAdvogado = async (req, res) => {
         const advogadoCriado = await Advogado.criar(novoAdvogado);
         res.status(201).json(advogadoCriado);
     } catch (error) {
-        res.status(403).json({ error: "Falha ao criar o advogado" });
+        res.status(500).json({ error: `Falha ao criar o advogado: ${error.message}` });
     }
 };
 
@@ -38,14 +38,13 @@ exports.atualizarAdvogado = async (req, res) => {
     const dadosAtualizados = req.body;
     try {
         const advogadoAtualizado = await Advogado.atualizar(id, dadosAtualizados);
-
-            if (advogadoAtualizado) {
-                res.status(201).json({ response: "Atualização executada" });
-            } else {
-                res.status(401).json({ response: 'Erro encontrado na atualização' });
-            }
+        if (advogadoAtualizado) {
+            res.status(200).json({ response: "Advogado atualizado com sucesso" });
+        } else {
+            res.status(404).json({ error: 'Advogado não encontrado' });
+        }
     } catch (error) {
-        res.status(403).json({ error: "Falha ao atualizar o advogado" });
+        res.status(500).json({ error: `Falha ao atualizar o advogado: ${error.message}` });
     }
 };
 
@@ -54,8 +53,12 @@ exports.excluirAdvogado = async (req, res) => {
     const { id } = req.params;
     try {
         const advogadoExcluido = await Advogado.excluir(id);
-        res.json(advogadoExcluido);
+        if (advogadoExcluido) {
+            res.status(200).json({ response: "Advogado excluído com sucesso" });
+        } else {
+            res.status(404).json({ error: 'Advogado não encontrado' });
+        }
     } catch (error) {
-        res.status(403).json({ error: "Falha ao excluir o advogado" });
+        res.status(500).json({ error: `Falha ao excluir o advogado: ${error.message}` });
     }
 };
