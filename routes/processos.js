@@ -17,6 +17,9 @@ router.get("/", processosController.listarProcessos);
 // Listar todos os processos vinculados
 router.get("/vinculados/:id", processosController.listarProcessosVinculados);
 
+// Listar todos os processos vinculados a um cliente
+router.get("/vinculados/cliente/:id", processosController.listarProcessosClienteVinculados);
+
 // Listar todos os tipos de processos
 router.get("/tipos", processosController.listarTiposProcessos);
 

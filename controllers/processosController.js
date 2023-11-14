@@ -24,6 +24,17 @@ exports.listarProcessosVinculados = async (req, res) => {
     }
 };
 
+// Listar todos os processos vinculados ao cliente
+exports.listarProcessosClienteVinculados = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const processos = await Processo.listarTodosVinculadosCliente(id);
+        res.json(processos);
+    } catch (error) {
+        res.status(500).json({ error: "Falha ao buscar os processos vinculados ao cliente" });
+    }
+};
+
 // Listar todos os tipos de processos
 exports.listarTiposProcessos = async (req, res) => {
     try {

@@ -35,6 +35,15 @@ class Processo {
             return false;
         }
     }
+    
+    static async listarTodosVinculadosCliente(id) {
+        try {
+            const results = await client.query("select p.id, p.numero, p.comanda, p.tipo from public.processos p join vinculovp vp on p.id = vp.id_processo join vinculoac ac on vp.id_vinculo = ac.id join advogados a on ac.id_advogado = a.id join clientes c on ac.id_cliente = c.id where c.id = $1 group by p.id, p.numero, p.comanda, p.tipo", [id]);
+            return results.rows;
+        } catch (error) {
+            return false;
+        }
+    }
 
     static async listarTodosTipos() {
         try {
