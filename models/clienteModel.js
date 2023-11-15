@@ -43,18 +43,16 @@ class Cliente {
     }
 
     static async criar(novoCliente) {
-        novoCliente.cep = novoCliente.cep == '' ? null : parseInt(novoCliente.cep)
         novoCliente.contato = novoCliente.contato == '' ? null : parseInt(novoCliente.contato)
-        novoCliente.numberEnde = novoCliente.numberEnde == '' ? null : parseInt(novoCliente.numberEnde)
-
-        const { advogado_id, nome, contato, cpf, data_nasc, sexo, logradouro, endereco, cep, numberEnde, complemento, cidade, bairro, emial, senha } = novoCliente;
-
+        
+        const { advogado_id, nome, contato, cpf, data_nasc, sexo, logradouro, endereco, cep, numberEnde, complemento, cidade, bairro, emial, new_senha } = novoCliente;
+        
         try {
             const result = await client.query(
-                "INSERT INTO public.clientes (nome, contato, cpf, data_nasc, sexo, logradouro, endereco, cep, numberende, complemento, cidade, bairro, emial, senha) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) RETURNING *",
-                [nome, contato, cpf, data_nasc, sexo, logradouro, endereco, cep, numberEnde, complemento, cidade, bairro, emial, senha]
+                "INSERT INTO public.clientes (nome, cpf, data_nasc, sexo, emial, cep, bairro, complemento, cidade, contato, logradouro, endereco, senha, numberende) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) RETURNING *",
+                [nome, cpf, data_nasc, sexo, emial, cep, bairro, complemento, cidade, contato, logradouro, endereco, new_senha, numberEnde]
             );
-
+            
             await client.query(
                 "INSERT INTO public.vinculoac (id_advogado, id_cliente) VALUES ($1, $2) RETURNING *",
                 [advogado_id, result.rows[0].id]
@@ -67,6 +65,8 @@ class Cliente {
     }
 
     static async atualizar(id, dadosAtualizados) {
+        dadosAtualizados.cep = dadosAtualizados.cep ? dadosAtualizados.cep : null
+        console.log(dadosAtualizados)
         const { nome, cpf, data_nasc, sexo, emial, cep, bairro, complemento, cidade, contato, logradouro, endereco, senha, numberEnde } = dadosAtualizados;
         try {
             await client.query(

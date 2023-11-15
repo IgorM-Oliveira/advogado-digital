@@ -20,7 +20,7 @@ class Processo {
     static async listarTodosVinculados(id) {
         try {
             const results = await client.query("select p.id, p.numero, p.comanda, p.tipo from public.processos p join vinculovp vp on p.id = vp.id_processo join vinculoac ac on vp.id_vinculo = ac.id join advogados a on ac.id_advogado = a.id where a.id = $1 group by p.id, p.numero, p.comanda, p.tipo", [id]);
-            const resultsCliente = await client.query("select ac.id_cliente cliente from public.processos p join vinculovp vp on p.id = vp.id_processo join vinculoac ac on vp.id_vinculo = ac.id join advogados a on ac.id_advogado = a.id where a.id = $1 group by ac.id_cliente", [id]);
+            const resultsCliente = await client.query("select ac.id_cliente cliente from vinculoac ac join advogados a on ac.id_advogado = a.id where a.id = $1 group by ac.id_cliente", [id]);
 
             let cliente = []
 
